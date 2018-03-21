@@ -42,7 +42,7 @@ except NameError:
 
 from builtins import *
 from dateutil.parser import parse
-from meza.io import read_csv, IterStringIO, write
+from meza.io import read_tsv, IterStringIO, write
 
 from . import utils
 from .ofx import OFX
@@ -145,7 +145,7 @@ def run():  # noqa: C901
     source = open(args.source, encoding=args.encoding) if args.source else stdin
 
     try:
-        records = read_csv(source, has_header=cont.has_header)
+        records = read_tsv(source, has_header=cont.has_header)
         groups = cont.gen_groups(records, args.chunksize)
         trxns = cont.gen_trxns(groups, args.collapse)
         cleaned_trxns = cont.clean_trxns(trxns)
