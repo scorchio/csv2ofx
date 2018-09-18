@@ -9,7 +9,7 @@ mapping = {
     'account': itemgetter('könyvelési számla'),
     'date': itemgetter('könyvelés dátuma'),
     'amount': itemgetter('összeg'),
-    'payee': itemgetter('partner elnevezése'),
+    'payee': lambda r: r['partner elnevezése'] if r['partner elnevezése'] else 'K&H',
     'currency': itemgetter('összeg devizaneme'),
     'desc': itemgetter('típus'),
     'notes': itemgetter('közlemény'),
