@@ -6,7 +6,6 @@ from operator import itemgetter
 
 mapping = {
     'has_header': True,
-    'delimiter': '\t',
     'account': itemgetter('könyvelési számla'),
     'date': itemgetter('könyvelés dátuma'),
     'amount': itemgetter('összeg'),
