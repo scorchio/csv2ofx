@@ -7,7 +7,8 @@ csv2ofx.mappings.mintapi
 
 Provides a mapping for transactions obtained via the mintapi python script
 """
-from __future__ import absolute_import
+from __future__ import (
+    absolute_import, division, print_function, unicode_literals)
 
 from operator import itemgetter
 
@@ -27,6 +28,6 @@ mapping = {
     'bank': itemgetter('fi'),
     'currency': 'USD',
     'id': itemgetter('id'),
-    'shares': itemgetter('shares'),
+    'shares': lambda tr: tr['shares'] if tr['shares'] != '' else 0.0,
     'symbol': itemgetter('symbol'),
 }

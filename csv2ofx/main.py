@@ -24,7 +24,7 @@ import time
 import itertools as it
 import traceback
 
-from sys import stdin, stdout
+from sys import stdin, stdout, exit
 from importlib import import_module
 from imp import find_module, load_module
 from pkgutil import iter_modules
@@ -144,8 +144,11 @@ def run():  # noqa: C901
     cont = QIF(mapping, **okwargs) if args.qif else OFX(mapping, **okwargs)
     source = open(args.source, encoding=args.encoding) if args.source else stdin
 
+    delimiter = mapping.get('delimiter', ',')
+
     try:
-        records = read_csv(source, has_header=cont.has_header)
+        records = read_csv(source, has_header=cont.has_header,
+            delimiter=delimiter)
         groups = cont.gen_groups(records, args.chunksize)
         trxns = cont.gen_trxns(groups, args.collapse)
         cleaned_trxns = cont.clean_trxns(trxns)
@@ -187,9 +190,9 @@ def run():  # noqa: C901
             msg += 'Check `start` and `end` options.'
         else:
             msg += 'Try again with `-c` option.'
-    except ValueError:
-        # csv2ofx called with no arguments
-        msg = 0
+    except ValueError as err:
+        # csv2ofx called with no arguments or broken mapping
+        msg = 'Possible mapping problem: %s. ' % str(err)
         parser.print_help()
     except Exception as err:  # pylint: disable=broad-except
         msg = 1
